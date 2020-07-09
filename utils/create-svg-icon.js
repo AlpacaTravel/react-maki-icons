@@ -1,5 +1,4 @@
 import React from "react";
-import SvgIcon from "../svg-icon";
 
 export default function createSvgIcon(children, name) {
   // Props
