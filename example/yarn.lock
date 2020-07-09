@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@alpaca-travel/react-maki-icons@link:..":
+  version "0.0.0"
+  uid ""
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -6357,10 +6361,6 @@ react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
-
-"react-maki-icons-comp@link:..":
-  version "0.0.0"
-  uid ""
 
 react-scripts@^1.1.4:
   version "1.1.5"

@@ -6,9 +6,11 @@ export default function createSvgIcon(children, name) {
 
   // Build the component to return
   const Component = (props, ref) => {
-    <SvgIconComponent ref={ref} {...props} size={size}>
-      {children}
-    </SvgIconComponent>;
+    return (
+      <SvgIconComponent ref={ref} {...props} size={size}>
+        {children}
+      </SvgIconComponent>
+    );
   };
 
   if (process.env.NODE_ENV !== "production") {
@@ -20,7 +22,7 @@ export default function createSvgIcon(children, name) {
 
 import PropTypes from "prop-types";
 
-const SvgIconComponent = React.forwardRef(function SvgIcon(props, ref) {
+const SvgIcon = (props, ref) => {
   const { size = 11 } = props;
 
   const {
@@ -50,7 +52,9 @@ const SvgIconComponent = React.forwardRef(function SvgIcon(props, ref) {
       {titleAccess ? <title>{titleAccess}</title> : null}
     </Component>
   );
-});
+};
+
+const SvgIconComponent = React.forwardRef(SvgIcon);
 
 SvgIcon.propTypes = {
   style: PropTypes.any,
