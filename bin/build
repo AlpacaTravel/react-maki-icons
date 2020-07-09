@@ -12,7 +12,7 @@ const fsWriteFile = util.promisify(fs.writeFile);
 
 // Read in our icons
 const iconsPath = path.resolve(__dirname, "../node_modules/@mapbox/maki/icons");
-const componentPath = path.resolve(__dirname, "../src/icons");
+const componentPath = path.resolve(__dirname, "../icons");
 
 // Work through reading in each svg
 (async () => {
