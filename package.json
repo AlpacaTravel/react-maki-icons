@@ -2,6 +2,10 @@
   "name": "@alpaca-travel/react-maki-icons",
   "version": "1.0.2",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlpacaTravel/react-maki-icons.git"
+  },
   "keywords": [
     "mapbox",
     "maki",
