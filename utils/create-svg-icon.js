@@ -22,18 +22,18 @@ export default function createSvgIcon(children, name) {
 import PropTypes from "prop-types";
 
 const SvgIconComponent = React.forwardRef(function SvgIcon(props, ref) {
-  const { size = 11 } = props; 
+  const { size = 11 } = props;
 
-  const { 
+  const {
     style,
     className,
     htmlColor,
-    component: Component = 'svg',
+    component: Component = "svg",
     viewBox = `0 0 ${size} ${size}`,
     children,
     titleAccess,
     ...other
-  }
+  } = props;
 
   return (
     <Component
@@ -42,15 +42,15 @@ const SvgIconComponent = React.forwardRef(function SvgIcon(props, ref) {
       viewBox={viewBox}
       focusable={false}
       aria-hidden={titleAccess ? undefined : true}
-      role={titleAccess ? 'img' : undefined}
+      role={titleAccess ? "img" : undefined}
       color={htmlColor}
       ref={ref}
       {...other}
     >
       {children}
-      {titleAccess ? (<title>{titleAccess}</title>): null}
+      {titleAccess ? <title>{titleAccess}</title> : null}
     </Component>
-  )
+  );
 });
 
 SvgIcon.propTypes = {
@@ -58,11 +58,11 @@ SvgIcon.propTypes = {
   className: PropTypes.string,
   component: PropTypes.oneOf([PropTypes.element, PropTypes.string]),
   children: PropTypes.any,
-}
+};
 
 SvgIcon.defaultProps = {
   style: null,
   children: null,
   component: null,
   className: null,
-}
+};
