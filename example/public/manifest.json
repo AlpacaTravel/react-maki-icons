@@ -1,0 +1,8 @@
+{
+  "short_name": "react-maki-icons-comp",
+  "name": "react-maki-icons-comp",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

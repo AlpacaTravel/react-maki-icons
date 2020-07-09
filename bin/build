@@ -12,7 +12,7 @@ const fsWriteFile = util.promisify(fs.writeFile);
 
 // Read in our icons
 const iconsPath = path.resolve(__dirname, "../node_modules/@mapbox/maki/icons");
-const componentPath = path.resolve(__dirname, "../icons");
+const componentPath = path.resolve(__dirname, "../src/icons");
 
 // Work through reading in each svg
 (async () => {
@@ -42,16 +42,16 @@ const componentPath = path.resolve(__dirname, "../icons");
 
 // Write out the component source
 const writeComponent = async ({ name, svg, originalShortName }) => {
-  const output = path.resolve(componentPath, `${originalShortName}.jsx`);
+  const output = path.resolve(componentPath, `${originalShortName}.js`);
 
   const contents = `
 import React from 'react';
 import createSvgIcon from '../utils/create-svg-icon';
 
 export default createSvgIcon(
-  <>
+  <React.fragment>
     ${svg.children.map(asReact).join("\n")}
-  </>,
+  </React.fragment>,
   '${name}'
 );
 `;
@@ -95,7 +95,7 @@ const writeIndex = async (parts) => {
 
   parts.forEach((part) => {
     exported.push(
-      `export { default as ${part.name} } from './icons/${part.originalShortName}.jsx';`
+      `export { default as ${part.name} } from './icons/${part.originalShortName}';`
     );
   });
 
