@@ -1,0 +1,17 @@
+{
+  "name": "@alpaca-travel/react-maki",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "camelcase": "^6.0.0"
+  },
+  "dependencies": {
+    "@mapbox/maki": "^6.2.0",
+    "camel-class-case": "^1.2.0",
+    "svgson": "^4.1.0"
+  }
+}

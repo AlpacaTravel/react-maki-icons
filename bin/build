@@ -1,0 +1,106 @@
+#!/usr/bin/env node
+const fs = require("fs");
+const path = require("path");
+const { parse, stringify } = require("svgson");
+const util = require("util");
+const { camelClassCase } = require("camel-class-case");
+
+// Promisfy nodejs
+const fsReaddir = util.promisify(fs.readdir);
+const fsReadFile = util.promisify(fs.readFile);
+const fsWriteFile = util.promisify(fs.writeFile);
+
+// Read in our icons
+const iconsPath = path.resolve(__dirname, "../node_modules/@mapbox/maki/icons");
+const componentPath = path.resolve(__dirname, "../src/icons");
+
+// Work through reading in each svg
+(async () => {
+  const files = (await fsReaddir(iconsPath)).filter((file) =>
+    /.svg$/.test(file)
+  );
+
+  const parts = [];
+
+  for (let file of files) {
+    // Name the svg
+    const originalShortName = file.replace(/.svg$/, "");
+    const name = camelClassCase(originalShortName);
+    // Obtain the source
+    const source = await fsReadFile(path.resolve(iconsPath, file), "utf-8");
+    const svg = await parse(source);
+    // Write the component
+    const part = { name, svg, originalShortName };
+    parts.push(part);
+    await writeComponent(part);
+  }
+
+  await writeIndex(parts);
+
+  console.log("Completed");
+})();
+
+// Write out the component source
+const writeComponent = async ({ name, svg, originalShortName }) => {
+  const output = path.resolve(componentPath, `${originalShortName}.jsx`);
+
+  const contents = `
+import React from 'react';
+import createSvgIcon from '../utils/create-svg-icon';
+
+export default createSvgIcon(
+  <>
+    ${svg.children.map(asReact).join("\n")}
+  </>,
+  '${name}'
+);
+`;
+  await fsWriteFile(output, contents);
+};
+
+const asReact = (element) => {
+  if (!element) {
+    return "";
+  }
+  let str = "";
+  str += `<${element.name}`;
+  // Attributes
+  if (element.attributes) {
+    const attributes = [];
+    Object.keys(element.attributes).forEach((key) => {
+      attributes.push(`${key}="${element.attributes[key]}"`);
+    });
+    if (attributes.length) {
+      str += ` ${attributes.join(" ")}`;
+    }
+  }
+
+  // Process the next element
+  if (!element.children.length || element.value) {
+    str += `/>`;
+  } else {
+    str += ">";
+    if (element.value) {
+      str += element.value;
+    }
+    str += element.children.map(asReact).join("");
+    str += `</${element.name}>`;
+  }
+
+  return str;
+};
+
+const writeIndex = async (parts) => {
+  const exported = [];
+
+  parts.forEach((part) => {
+    exported.push(
+      `export { default as ${part.name} } from './icons/${part.originalShortName}.jsx';`
+    );
+  });
+
+  await fsWriteFile(
+    path.resolve(componentPath, "../index.js"),
+    exported.join("\n")
+  );
+};
