@@ -7,9 +7,9 @@ export default function createSvgIcon(children, name) {
 
   // Build the component to return
   const Component = (props, ref) => {
-    <SvgIcon ref={ref} {...props} size={size}>
+    <SvgIconComponent ref={ref} {...props} size={size}>
       {children}
-    </SvgIcon>;
+    </SvgIconComponent>;
   };
 
   if (process.env.NODE_ENV !== "production") {
@@ -21,7 +21,7 @@ export default function createSvgIcon(children, name) {
 
 import PropTypes from "prop-types";
 
-const SvgIcon = React.forwardRef(function SvgIcon(props, ref) {
+const SvgIconComponent = React.forwardRef(function SvgIcon(props, ref) {
   const { size = 11 } = props; 
 
   const { 
