@@ -16,9 +16,7 @@ const componentPath = path.resolve(__dirname, "../src/icons");
 
 // Work through reading in each svg
 (async () => {
-  const files = (await fsReaddir(iconsPath)).filter((file) =>
-    /.svg$/.test(file)
-  );
+  const files = (await fsReaddir(iconsPath)).filter(file => /.svg$/.test(file));
 
   const parts = [];
 
@@ -42,7 +40,7 @@ const componentPath = path.resolve(__dirname, "../src/icons");
 
 // Write out the component source
 const writeComponent = async ({ name, svg, originalShortName }) => {
-  const output = path.resolve(componentPath, `${originalShortName}.js`);
+  const output = path.resolve(componentPath, `${originalShortName}.tsx`);
 
   const content = `[${svg.children.map((p, i) => asReact(p, i)).join(",")}]`;
 
@@ -63,12 +61,12 @@ const asReact = (element, i) => {
     return "";
   }
   let str = "";
-  str += `<${element.name} key="s-${i}"`;
+  str += `<${element.name} key='s-${i}'`;
   // Attributes
   if (element.attributes) {
     const attributes = [];
-    Object.keys(element.attributes).forEach((key) => {
-      attributes.push(`${key}="${element.attributes[key]}"`);
+    Object.keys(element.attributes).forEach(key => {
+      attributes.push(`${key}='${element.attributes[key]}'`);
     });
     if (attributes.length) {
       str += ` ${attributes.join(" ")}`;
@@ -90,17 +88,29 @@ const asReact = (element, i) => {
   return str;
 };
 
-const writeIndex = async (parts) => {
+const writeIndex = async parts => {
   const exported = [];
 
-  parts.forEach((part) => {
+  parts.forEach(part => {
     exported.push(
       `export { default as ${part.name} } from './icons/${part.originalShortName}';`
     );
   });
 
   await fsWriteFile(
-    path.resolve(componentPath, "../index.js"),
+    path.resolve(componentPath, "../index.tsx"),
     exported.join("\n")
+  );
+
+  const minimal11 = exported.filter(f => /11';$/.test(f));
+  await fsWriteFile(
+    path.resolve(componentPath, "../index-11.tsx"),
+    minimal11.map(str => str.replace("11 }", " }")).join("\n")
+  );
+
+  const minimal15 = exported.filter(f => /15';$/.test(f));
+  await fsWriteFile(
+    path.resolve(componentPath, "../index-15.tsx"),
+    minimal15.map(str => str.replace("15 }", " }")).join("\n")
   );
 };

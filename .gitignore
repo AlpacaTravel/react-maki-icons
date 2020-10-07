@@ -104,3 +104,10 @@ dist
 .tern-port
 
 icons/
+utils/
+index.js
+index.d.ts
+index-11.js
+index-11.d.ts
+index-15.js
+index-15.d.ts
