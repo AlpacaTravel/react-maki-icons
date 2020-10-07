@@ -2,9 +2,7 @@
 import React from 'react';
 import createSvgIcon from '../utils/create-svg-icon';
 
-export const paths:string[] = [
-  `M7.5,0C3.3579,0,0,3.3579,0,7.5S3.3579,15,7.5,15S15,11.6421,15,7.5S11.6421,0,7.5,0z M3,6h9v3H3V6z`
-];
+export const paths:string[] = ['M512 0c-283 0-512 229-512 512s229 512 512 512 512-229 512-512-229-512-512-512z m-307 410h614v204h-614v-204z'];
 
 export default createSvgIcon(
   [<path key='s-0' id='roadblock-24' d={paths[0]}/>],

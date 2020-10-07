@@ -24,7 +24,7 @@ import { Airport11 as Airport } from "alpaca-travel/react-maki-icons";
 // Or the exact version you want
 //import Airport from "@alpaca-travel/react-maki-icons/icons/airport-11";
 
-// You can also access the SVG paths
+// You can also access the SVG paths (scaled to 1024 applying with rel and rounding)
 // import { iconsMap } from "@alpaca-travel/react-maki-icons"
 // import { paths } from "@alpaca-travel/react-maki-icons/airport-11.js"
 

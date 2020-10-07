@@ -2,7 +2,7 @@ import React, { FunctionComponent, ReactNode } from "react";
 
 export default function createSvgIcon(children: React.ReactNode, name: string) {
   // Props
-  const size = Number(name.replace(/[^\d]+/, ""));
+  const size = 1024;
 
   // Build the component to return
   const Component: FunctionComponent<SvgIconProps> = props => {

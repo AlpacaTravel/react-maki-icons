@@ -5,6 +5,7 @@ const { parse, stringify } = require("svgson");
 const util = require("util");
 const { camelClassCase } = require("camel-class-case");
 const Entities = require("html-entities").AllHtmlEntities;
+const svgpath = require("svgpath");
 
 const entities = new Entities();
 
@@ -45,19 +46,30 @@ const componentPath = path.resolve(__dirname, "../src/icons");
 const writeComponent = async ({ name, svg, originalShortName }) => {
   const output = path.resolve(componentPath, `${originalShortName}.tsx`);
 
-  const content = `[${svg.children.map((p, i) => asReact(p, i)).join(",")}]`;
+  const scaleBy = /11/.test(name) ? 1024 / 11 : 1024 / 15;
+
+  const scaled = [];
+  const scale = path => {
+    scaled.push(
+      `'${svgpath(entities.decode(path))
+        .abs()
+        .scale(scaleBy)
+        .round()
+        .rel()
+        .toString()}'`
+    );
+    return scaled.length - 1;
+  };
+
+  const content = `[${svg.children
+    .map((p, i) => asReact(p, i, scale))
+    .join(",")}]`;
 
   const contents = `
 import React from 'react';
 import createSvgIcon from '../utils/create-svg-icon';
 
-export const paths:string[] = [
-  ${svg.children
-    .map(p =>
-      `\`${entities.decode(p.attributes.d).replace("\n", "")}\`\n`.trim()
-    )
-    .join("\n  ,")}
-];
+export const paths:string[] = [${scaled.join(",\n")}];
 
 export default createSvgIcon(
   ${content},
@@ -67,7 +79,7 @@ export default createSvgIcon(
   await fsWriteFile(output, contents);
 };
 
-const asReact = (element, i) => {
+const asReact = (element, i, scale) => {
   if (!element) {
     return "";
   }
@@ -78,7 +90,8 @@ const asReact = (element, i) => {
     const attributes = [];
     Object.keys(element.attributes).forEach(key => {
       if (key === "d") {
-        attributes.push(`d={paths[${i}]}`);
+        const path = scale(element.attributes.d);
+        attributes.push(`d={paths[${path}]}`);
       } else {
         attributes.push(`${key}='${element.attributes[key]}'`);
       }
@@ -96,7 +109,7 @@ const asReact = (element, i) => {
     if (element.value) {
       str += element.value;
     }
-    str += element.children.map(asReact).join("");
+    str += element.children.map((e, y) => asReact(e, y, scale)).join("");
     str += `</${element.name}>`;
   }
 

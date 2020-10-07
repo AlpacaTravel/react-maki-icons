@@ -2,9 +2,7 @@
 import React from 'react';
 import createSvgIcon from '../utils/create-svg-icon';
 
-export const paths:string[] = [
-  `M6,4l2-2C7.9899,1.9304,7.9899,1.8596,8,1.79c0-0.4142,0.3358-0.75,0.75-0.75S9.5,1.3758,9.5,1.79S9.1642,2.54,8.75,2.54	H8.64L7.5,4H6z M9.48,5.83L8.65,7.5l0.83,1.67V10h-8V9.17L2.32,7.5L1.48,5.83V5h8V5.83z M7.5,7H6V5.5H5V7H3.5v1H5v1.5h1V8h1.5V7z`
-];
+export const paths:string[] = ['M559 372l186-186c-1-6-1-13 0-19 0-39 31-70 70-70s69 31 69 70-31 69-69 69h-11l-106 136h-139z m324 171l-78 155 78 156v77h-745v-77l78-156-78-155v-78h745v78z m-185 109h-139v-140h-94v140h-139v93h139v139h94v-139h139v-93z'];
 
 export default createSvgIcon(
   [<path key='s-0' d={paths[0]}/>],
