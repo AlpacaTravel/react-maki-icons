@@ -4,6 +4,9 @@ const path = require("path");
 const { parse, stringify } = require("svgson");
 const util = require("util");
 const { camelClassCase } = require("camel-class-case");
+const Entities = require("html-entities").AllHtmlEntities;
+
+const entities = new Entities();
 
 // Promisfy nodejs
 const fsReaddir = util.promisify(fs.readdir);
@@ -48,6 +51,12 @@ const writeComponent = async ({ name, svg, originalShortName }) => {
 import React from 'react';
 import createSvgIcon from '../utils/create-svg-icon';
 
+export const paths:string[] = [
+  ${svg.children
+    .map(p => `\`${entities.decode(p.attributes.d).replace("\n", "")}\`\n`)
+    .join("\n  ,")}
+];
+
 export default createSvgIcon(
   ${content},
   '${name}'
@@ -66,7 +75,11 @@ const asReact = (element, i) => {
   if (element.attributes) {
     const attributes = [];
     Object.keys(element.attributes).forEach(key => {
-      attributes.push(`${key}='${element.attributes[key]}'`);
+      if (key === "d") {
+        attributes.push(`d={paths[${i}]}`);
+      } else {
+        attributes.push(`${key}='${element.attributes[key]}'`);
+      }
     });
     if (attributes.length) {
       str += ` ${attributes.join(" ")}`;
