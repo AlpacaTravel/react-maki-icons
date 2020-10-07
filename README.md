@@ -24,8 +24,16 @@ import { Airport11 as Airport } from "alpaca-travel/react-maki-icons";
 // Or the exact version you want
 //import Airport from "@alpaca-travel/react-maki-icons/icons/airport-11";
 
+// You can also access the SVG paths
+// import { iconsMap } from "@alpaca-travel/react-maki-icons"
+// import { paths } from "@alpaca-travel/react-maki-icons/airport-11.js"
+
 export default function Component() {
   // Use style to apply to the svg component (like fill etc)
   return <Airport11 fill="#000000" />;
 }
 ```
+
+## Online Demo
+
+[![Edit Demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-maki-icons-1f6kq?file=/src/App.tsx)

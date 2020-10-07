@@ -53,7 +53,9 @@ import createSvgIcon from '../utils/create-svg-icon';
 
 export const paths:string[] = [
   ${svg.children
-    .map(p => `\`${entities.decode(p.attributes.d).replace("\n", "")}\`\n`)
+    .map(p =>
+      `\`${entities.decode(p.attributes.d).replace("\n", "")}\`\n`.trim()
+    )
     .join("\n  ,")}
 ];
 
@@ -102,28 +104,49 @@ const asReact = (element, i) => {
 };
 
 const writeIndex = async parts => {
-  const exported = [];
+  const exported = parts.map(part => ({
+    package: `export { default as ${part.name} } from './icons/${part.originalShortName}';\nimport { paths as paths${part.name} } from './icons/${part.originalShortName}';`,
+    part: `paths['${part.originalShortName}'] = { paths: paths${part.name} };`
+  }));
 
-  parts.forEach(part => {
-    exported.push(
-      `export { default as ${part.name} } from './icons/${part.originalShortName}';`
-    );
-  });
+  const template = exports => {
+    return `
+${exports.map(e => e.package).join("\n")}
+type PathsMap = {
+  [key:string]: {
+    paths: string[]
+  }
+}
+const paths:PathsMap = {};
+${exports.map(e => e.part).join("\n")}
+export const iconsMap = paths;
+`;
+  };
 
   await fsWriteFile(
     path.resolve(componentPath, "../index.tsx"),
-    exported.join("\n")
+    template(exported)
   );
 
-  const minimal11 = exported.filter(f => /11';$/.test(f));
+  const minimal11 = exported
+    .filter(f => /11';$/.test(f.package))
+    .map(f => ({
+      package: f.package.replace(/11 }/g, " }"),
+      part: f.part.replace(/-11'/g, "'").replace(/11 }/g, " }")
+    }));
   await fsWriteFile(
     path.resolve(componentPath, "../index-11.tsx"),
-    minimal11.map(str => str.replace("11 }", " }")).join("\n")
+    template(minimal11)
   );
 
-  const minimal15 = exported.filter(f => /15';$/.test(f));
+  const minimal15 = exported
+    .filter(f => /15';$/.test(f.package))
+    .map(f => ({
+      package: f.package.replace(/15 }/g, " }"),
+      part: f.part.replace(/-15'/g, "'").replace(/15 }/g, " }")
+    }));
   await fsWriteFile(
     path.resolve(componentPath, "../index-15.tsx"),
-    minimal15.map(str => str.replace("15 }", " }")).join("\n")
+    template(minimal15)
   );
 };

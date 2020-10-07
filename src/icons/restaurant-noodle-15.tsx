@@ -4,7 +4,6 @@ import createSvgIcon from '../utils/create-svg-icon';
 
 export const paths:string[] = [
   ``
-
 ];
 
 export default createSvgIcon(
