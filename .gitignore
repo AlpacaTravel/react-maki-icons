@@ -103,8 +103,10 @@ dist
 # TernJS port file
 .tern-port
 
-icons/
-utils/
+icons/*.js
+icons/*.d.ts
+utils/*.js
+utils/*.d.ts
 index.js
 index.d.ts
 index-11.js
