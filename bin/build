@@ -46,7 +46,7 @@ const componentPath = path.resolve(__dirname, "../src/icons");
 const writeComponent = async ({ name, svg, originalShortName }) => {
   const output = path.resolve(componentPath, `${originalShortName}.tsx`);
 
-  const scaleBy = /11/.test(name) ? 1024 / 11 : 1024 / 15;
+  const scaleBy = 1024 / 15;
 
   const scaled = [];
   const scale = path => {
@@ -118,13 +118,15 @@ const asReact = (element, i, scale) => {
 
 const writeIndex = async parts => {
   const exported = parts.map(part => ({
-    package: `export { default as ${part.name} } from './icons/${part.originalShortName}';\nimport { paths as paths${part.name} } from './icons/${part.originalShortName}';`,
+    import: `import { paths as paths${part.name} } from './icons/${part.originalShortName}';`,
+    export: `export { default as ${part.name} } from './icons/${part.originalShortName}';`,
     part: `paths['${part.originalShortName}'] = { paths: paths${part.name} };`
   }));
 
   const template = exports => {
     return `
-${exports.map(e => e.package).join("\n")}
+${exports.map(e => e.import).join("\n")}
+${exports.map(e => e.export).join("\n")}
 type PathsMap = {
   [key:string]: {
     paths: string[]
@@ -139,27 +141,5 @@ export const iconsMap = paths;
   await fsWriteFile(
     path.resolve(componentPath, "../index.tsx"),
     template(exported)
-  );
-
-  const minimal11 = exported
-    .filter(f => /11';$/.test(f.package))
-    .map(f => ({
-      package: f.package.replace(/11 }/g, " }"),
-      part: f.part.replace(/-11'/g, "'").replace(/11 }/g, " }")
-    }));
-  await fsWriteFile(
-    path.resolve(componentPath, "../index-11.tsx"),
-    template(minimal11)
-  );
-
-  const minimal15 = exported
-    .filter(f => /15';$/.test(f.package))
-    .map(f => ({
-      package: f.package.replace(/15 }/g, " }"),
-      part: f.part.replace(/-15'/g, "'").replace(/15 }/g, " }")
-    }));
-  await fsWriteFile(
-    path.resolve(componentPath, "../index-15.tsx"),
-    template(minimal15)
   );
 };

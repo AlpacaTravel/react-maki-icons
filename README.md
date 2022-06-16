@@ -16,21 +16,17 @@ npm install @alpaca-travel/react-maki-icons
 import React from "react";
 
 // Peel off the icon you need
-import { Airport11 as Airport } from "alpaca-travel/react-maki-icons";
+import { Airport } from "alpaca-travel/react-maki-icons";
 
-// Alternatively, pull from the presized
-// import { Airport } from "@alpaca-travel/react-maki-icons/index-11.js";
-// import { Airport } from "@alpaca-travel/react-maki-icons/index-15.js";
 // Or the exact version you want
-//import Airport from "@alpaca-travel/react-maki-icons/icons/airport-11";
+//import Airport from "@alpaca-travel/react-maki-icons/icons/airport-15";
 
 // You can also access the SVG paths (scaled to 1024 applying with rel and rounding)
 // import { iconsMap } from "@alpaca-travel/react-maki-icons"
-// import { paths } from "@alpaca-travel/react-maki-icons/airport-11.js"
 
 export default function Component() {
   // Use style to apply to the svg component (like fill etc)
-  return <Airport11 fill="#000000" />;
+  return <Airport fill="#000000" />;
 }
 ```
 
